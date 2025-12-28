@@ -1,22 +1,72 @@
 const express = require("express");
 const connectdB = require("./config/database.js");
-const User = require("./models/Users.js");
+// const User = require("./models/Users.js");
+const Users = require("./models/Users.js");
 // const mongodb = require("mongodb");
 // const uri ="mongodb+srv://mahathitalluru:Chowdary2718@@nodejs.ihrvwun.mongodb.net/?appName=NodeJS";
 
 const app = express();
 app.use(express.json());
 
-app.post("/Signup",async(req,res)=>{
-  const user = new User(req.body);
+// app.post("/Signup",async(req,res)=>{
+//   const user = new User(req.body);
+//   try{
+//     await user.save();
+//     res.send({message:"User created successfully"});
+//   }
+//   catch(err){
+//     res.status(400).send("Error creating user:"+ err.message);
+//   }
+// });
+// app.get("/users",async(req,res)=>{
+//   // const userEmail = req.body.email;
+//   try{
+//     await users.find();
+//     res.send({message:"Users fetched successfully"});
+//   }
+//   catch(err){
+//     res.status(400).send("Error fetching user:"+ err.message);
+//   }
+// });
+// app.get("/users", async (req, res) => {
+//   const users = await User.find();
+//   res.json(users);
+// });
+app.get("/users",async(req,res)=>{
+  const userEmail = req.body.email;
+  console.log(req.body.email);
+ 
   try{
-    await user.save();
-    res.send({message:"User created successfully"});
+    const users = await Users.find({email:userEmail});
+     if(users.length===0){
+     res.status(404).send("No users found");
+  }
+  else{
+    res.send(users);
+  }
   }
   catch(err){
-    res.status(400).send("Error creating user:"+ err.message);
+    res.status(400).send("Error fetching user:"+ err.message);  
   }
 });
+
+// app.get("/users",async(req,res)=>{
+//   const userEmail = req.body.email;
+
+//   try {
+//    const users = await User.find({email:userEmail});
+//    res.send(users);
+//     res.send({message:"User fetched successfully"});
+//   }
+//   catch(err){
+//     res.status(400).send("Error fetching user:"+ err.message);
+//   }
+
+// });
+
+
+
+
 // const user = new User({
 //     firstName:"Aditya",
 //     lastName:"M",
