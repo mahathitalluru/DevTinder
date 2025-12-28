@@ -32,23 +32,45 @@ app.use(express.json());
 //   const users = await User.find();
 //   res.json(users);
 // });
-app.get("/users",async(req,res)=>{
-  const userEmail = req.body.email;
-  console.log(req.body.email);
+// app.get("/users",async(req,res)=>{
+//   const userEmail = req.body.email;
+//   console.log(req.body.email);
  
+//   try{
+//     const users = await Users.find({email:userEmail});
+//      if(users.length===0){
+//      res.status(404).send("No users found");
+//   }
+//   else{
+//     res.send(users);
+//   }
+//   }
+//   catch(err){
+//     res.status(400).send("Error fetching user:"+ err.message);  
+//   }
+// });
+app.get("/users", async(req,res)=>{
+  const userId = req.query._id;
+  console.log(userId);
   try{
-    const users = await Users.find({email:userEmail});
-     if(users.length===0){
-     res.status(404).send("No users found");
-  }
-  else{
-    res.send(users);
-  }
+    const users = await Users.findById(userId);
+
+    if(!users){
+      res.status(404).send("User not found");
+    } else{
+res.send(users);
+    }  
   }
   catch(err){
     res.status(400).send("Error fetching user:"+ err.message);  
-  }
+  }         
 });
+// app.get("/users", async (req, res) => {
+//   const userId = req.query._id;
+//   const user = await Users.findById(userId);
+//   res.json(user);
+// });
+
 
 // app.get("/users",async(req,res)=>{
 //   const userEmail = req.body.email;
