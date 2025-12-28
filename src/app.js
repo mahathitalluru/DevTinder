@@ -53,12 +53,12 @@ app.get("/users", async(req,res)=>{
   const userId = req.query._id;
   console.log(userId);
   try{
-    const users = await Users.findById(userId);
+    const users = await Users.findByIdAndDelete(userId);
 
     if(!users){
       res.status(404).send("User not found");
     } else{
-res.send(users);
+res.send("user deleted successfully");
     }  
   }
   catch(err){
@@ -158,5 +158,5 @@ connectdB().then(() => {
     console.error("Database connection failed", err);
 });
 app.listen(3000,()=>{
-  console.log("server is successfully listening on 3000")
+  console.log("server is successfully listening on 3000");
 });
