@@ -1,9 +1,37 @@
 const express = require("express");
+const connectdB = require("./config/database.js");
+const User = require("./models/Users.js");
 // const mongodb = require("mongodb");
 // const uri ="mongodb+srv://mahathitalluru:Chowdary2718@@nodejs.ihrvwun.mongodb.net/?appName=NodeJS";
 
 const app = express();
-const {adminAuth,userAuth} = require("./middleware/auth.js");
+app.use(express.json());
+
+app.post("/Signup",async(req,res)=>{
+  const user = new User(req.body);
+  try{
+    await user.save();
+    res.send({message:"User created successfully"});
+  }
+  catch(err){
+    res.status(400).send("Error creating user:"+ err.message);
+  }
+});
+// const user = new User({
+//     firstName:"Aditya",
+//     lastName:"M",
+//     email:"adityaM.2000@gmail.com",
+//     password:"Chowdary2718"
+// });
+// try{
+// await user.save();
+// res.send({message:"User created successfully"});
+// }
+// catch(err){
+// res.status(400).send("Error creating user:"+ err.message);
+// }
+// });
+// const {adminAuth,userAuth} = require("./middleware/auth.js");
 // app.use("/test",(req,res) => {
 //     res.send("Hello from the server");
 // });
@@ -35,15 +63,15 @@ const {adminAuth,userAuth} = require("./middleware/auth.js");
 //   res.send("Third response");
 // });
 
-app.get("/",(err,req,res,next) => {
-  try{
-    throw new Error("Something went wrong");
-  }
-  catch(error){
-    // res.send("error");
-    next();
-  }
-});
+// app.get("/",(err,req,res,next) => {
+//   try{
+//     throw new Error("Something went wrong");
+//   }
+//   catch(error){
+//     // res.send("error");
+//     next();
+//   }
+// });
 
 // app.get("/admin/getAllData",(req,res) => {
 //   res.send("admin data sent")
@@ -52,6 +80,11 @@ app.get("/",(err,req,res,next) => {
 //   res.send("user deleted successfully")
 // });
 // app.use("/admin",adminAuth);
+connectdB().then(() => {
+    console.log("Database connected successfully");
+}).catch((err) => {
+    console.error("Database connection failed", err);
+});
 app.listen(3000,()=>{
   console.log("server is successfully listening on 3000")
 });
